@@ -1,0 +1,25 @@
+package org.example;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
+public class FileReader {
+    private static final String FILE_PATH = "src\\main\\resources\\input.txt";
+
+    public void readFromFile() {
+        if (Files.exists(Paths.get(FILE_PATH))) {
+            try {
+                List<String> lines = Files.readAllLines(Paths.get(FILE_PATH));
+                for (String s : lines) {
+
+                }
+            } catch (IOException e) {
+                System.err.println("Ошибка при чтении файла: " + e.getMessage());
+            }
+        } else {
+            System.err.println("Файл не найден");
+        }
+    }
+}

@@ -1,0 +1,44 @@
+package org.example;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@AllArgsConstructor
+@EqualsAndHashCode
+public class Department implements Comparable<Department> {
+    private final String name;
+    private Manager manager;
+    private final List<Employee> employees = new ArrayList<>();
+
+    public void addEmployee(Employee employee) {
+        employees.add(employee);
+    }
+
+    public double getAverageSalary() {
+        if (employees.isEmpty()){
+            return 0.0;
+        }
+        double avg = employees.stream()
+                .mapToDouble(Employee::getSalary)
+                .average()
+                .orElse(0.0);
+        return BigDecimal.valueOf(avg).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    }
+
+    public int getEmployeeCount() {
+        return employees.size();
+    }
+
+    @Override
+    public int compareTo(Department o) {
+        return this.name.compareTo(o.name);
+    }
+}

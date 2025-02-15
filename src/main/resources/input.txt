@@ -1,0 +1,14 @@
+Manager,1,Jane Smith,5000,HR
+Employee,101,John Doe,3000,1
+Employee,102,Emily Johnson,abc,1
+Manager,2,Michael Brown,6000,Sales
+Employee,103,Chris White,-2900,2
+Employee,104,Anna Taylor,3100,2
+Employee,105,Robert Black,,2
+
+Employee,106,Xavir Hernandez,7100,1
+Employee,107,Miguel Perez,100,1
+Employee,108,Yoseph Turner,8100,2
+Employee,109,William Smith,200,2
+Manager,3,Usman Ali,5000,AK
+Employee,110,Roman Black,4786,3

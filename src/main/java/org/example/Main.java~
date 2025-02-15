@@ -1,0 +1,62 @@
+package org.example;
+
+import org.example.model.Department;
+import org.example.service.parser.CommandLineParser;
+import org.example.service.parser.DataParser;
+import org.example.service.parser.Parser;
+import org.example.service.printer.DataPrinter;
+import org.example.service.printer.Printer;
+import org.example.service.sorter.EmployeeSorter;
+import org.example.util.Constants;
+import org.example.util.ErrorMessages;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
+public class Main {
+
+    public static void main(String[] args) {
+        CommandLineParser cmd = new CommandLineParser(args);
+        validateArguments(cmd);
+
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(Constants.INPUT_FILE));
+
+            Parser parser = new DataParser();
+            List<Department> departments = parser.parse(lines);
+
+            departments.sort(null);
+
+            if (cmd.getSortBy() != null) {
+                new EmployeeSorter().sort(departments, cmd.getSortBy(), cmd.getOrderBy());
+            }
+
+            Printer printer = new DataPrinter();
+            printResults(departments, parser.getInvalidData(), cmd, printer);
+
+        } catch (IOException e) {
+            System.err.println(ErrorMessages.FILE_READ_ERROR + e.getMessage());
+        }
+    }
+
+    private static void validateArguments(CommandLineParser cmd) {
+        if (cmd.getSortBy() != null && cmd.getOrderBy() == null) {
+            throw new IllegalArgumentException(ErrorMessages.MISSING_ORDER_FOR_SORT);
+        }
+
+        if (Constants.OUTPUT_FILE.equalsIgnoreCase(cmd.getOutput()) && cmd.getOutputPath() == null) {
+            throw new IllegalArgumentException(ErrorMessages.MISSING_PATH_FOR_FILE_OUTPUT);
+        }
+    }
+
+    private static void printResults(List<Department> departments, List<String> invalidData,
+                                     CommandLineParser cmd, Printer printer) throws IOException {
+        if (Constants.OUTPUT_FILE.equalsIgnoreCase(cmd.getOutput())) {
+            printer.printToFile(departments, invalidData, cmd.getOutputPath());
+        } else {
+            printer.printToConsole(departments, invalidData);
+        }
+    }
+}
